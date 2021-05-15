@@ -19,7 +19,7 @@ namespace ColorfulApp
             InitializeComponent();
             techSubj = new BindingList<Subject>();
             naturalSubj = new BindingList<Subject>();
-            foreach(Subject s in Data.Instance.SubjList)
+            foreach(Subject s in Data.Instance.Subjects)
             {
                 if (s.IsTechnicalSubject)
                     techSubj.Add(s);

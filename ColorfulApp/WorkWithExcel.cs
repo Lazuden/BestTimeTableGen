@@ -1,9 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using Excel = Microsoft.Office.Interop.Excel;
 using System.Data;
-using System.Data.OleDb;
 using System.Diagnostics;
 
 namespace ColorfulApp

@@ -37,7 +37,7 @@ namespace ColorfulApp
             switch (cbObjectType.SelectedIndex)
             {
                 case 1:
-                    lbObjects.DataSource = Data.Instance.SubjList.ToList();
+                    lbObjects.DataSource = Data.Instance.Subjects.ToList();
                     break;
                 case 2:
                     lbObjects.DataSource = Data.Instance.Classes.Values.ToList();

@@ -17,7 +17,7 @@ namespace ColorfulApp
         {
             InitializeComponent();
             bs = new BindingSource();
-            bs.DataSource = Data.Instance.SubjList;
+            bs.DataSource = Data.Instance.Subjects;
             lbSubjects.DataSource = bs;
             lbSubjects.DisplayMember = "Name";
             //lbSubjects.ValueMember = "Value";
