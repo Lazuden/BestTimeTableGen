@@ -1,41 +1,38 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data;
-using System.Drawing;
 using System.IO;
-using System.Linq;
 using System.Runtime.Serialization.Formatters.Binary;
-using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 using System.Windows.Forms;
-using System.Xml.Serialization;
 
 namespace ColorfulApp
 {
     public partial class MainForm : Form
     {
-        string FileName;
-        BindingSource lessonsBs;
-        BinaryFormatter bf;
-        DataTable shedule, teacherShedule;
-        bool ChangesHappend;
+        private string _fileName;
+        private BindingSource _lessonsBs;
+        private BinaryFormatter _bf;
+        private DataTable _shedule;
+        private DataTable _teacherShedule;
+        private bool _changesHappend;
 
         public MainForm()
         {
             InitializeComponent();
-            bf = new BinaryFormatter();
+            _bf = new BinaryFormatter();
 
 
             // Временно при загрузке, чтобы вечно не тыкать
             FillStartData();
-            lessonsBs = new BindingSource();
-            lessonsBs.DataSource = Data.Instance.LessonEditors;
+            _lessonsBs = new BindingSource
+            {
+                DataSource = Data.Instance.LessonEditors
+            };
 
             dgvPlan.AutoGenerateColumns = false;
-            dgvPlan.DataSource = lessonsBs;            
-            ChangesHappend = false;
+            dgvPlan.DataSource = _lessonsBs;            
+            _changesHappend = false;
         }
 
         private void FillStartData()
@@ -737,8 +734,8 @@ namespace ColorfulApp
                 gen.Next();
                 rtbOutput.Invoke(new Action(() => rtbOutput.Text += gen.ToString()));                
             }
-            shedule = gen.BestSolution();
-            teacherShedule = gen.TeacherTable();
+            _shedule = gen.BestSolution();
+            _teacherShedule = gen.TeacherTable();
         }
 
         private void сохранитьКакToolStripMenuItem_Click(object sender, EventArgs e)
@@ -755,25 +752,25 @@ namespace ColorfulApp
             };
             if (sfd.ShowDialog() == DialogResult.OK)
             {
-                FileName = sfd.FileName;
-                Text = "Оболочка баз знаний : " + Path.GetFileNameWithoutExtension(FileName);
-                Data.Instance.Name = Path.GetFileNameWithoutExtension(FileName);
+                _fileName = sfd.FileName;
+                Text = "Оболочка баз знаний : " + Path.GetFileNameWithoutExtension(_fileName);
+                Data.Instance.Name = Path.GetFileNameWithoutExtension(_fileName);
                 SaveFile();
             }
         }
 
         private void SaveFile()
         {
-            using (FileStream fs = new FileStream(FileName, FileMode.Create))
+            using (FileStream fs = new FileStream(_fileName, FileMode.Create))
             {
-                bf.Serialize(fs, Data.Instance);
+                _bf.Serialize(fs, Data.Instance);
                 MessageBox.Show("Сохранено успешно!");
             }
         }
 
         private void сохранитьToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (string.IsNullOrEmpty(FileName))
+            if (string.IsNullOrEmpty(_fileName))
                 ChooseFilePathToSave();
             else
                 SaveFile();
@@ -788,19 +785,19 @@ namespace ColorfulApp
             };
             if (ofd.ShowDialog() == DialogResult.OK)
             {
-                FileName = ofd.FileName;
-                Text = "Файл генератора расписаний : " + Path.GetFileNameWithoutExtension(FileName);
+                _fileName = ofd.FileName;
+                Text = "Файл генератора расписаний : " + Path.GetFileNameWithoutExtension(_fileName);
                 OpenFile();
             }
         }
 
         private void OpenFile()
         {
-            using (FileStream fs = new FileStream(FileName, FileMode.Open))
+            using (FileStream fs = new FileStream(_fileName, FileMode.Open))
             {
                 try
                 {
-                    Data.Instance = (Data)bf.Deserialize(fs);
+                    Data.Instance = (Data)_bf.Deserialize(fs);
                 }
                 catch
                 {
@@ -811,8 +808,8 @@ namespace ColorfulApp
 
         private void экспортВExcelToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (shedule != null)
-                WorkWithExcel.ExportToExcel(shedule);
+            if (_shedule != null)
+                WorkWithExcel.ExportToExcel(_shedule);
         }
 
         private void показатьЛогToolStripMenuItem_Click(object sender, EventArgs e)
@@ -828,7 +825,7 @@ namespace ColorfulApp
             {
                 LessonEditor additionalLe = paef.GetLe();
                 Data.Instance.LessonEditors.Add(additionalLe);
-                ChangesHappend = true;
+                _changesHappend = true;
             }
         }
 
@@ -841,7 +838,7 @@ namespace ColorfulApp
                 {
                     LessonEditor changingLe = paef.GetLe();
                     Data.Instance.LessonEditors[dgvPlan.SelectedCells[0].RowIndex] = changingLe;
-                    ChangesHappend = true;
+                    _changesHappend = true;
                 }
             }
         }
@@ -863,7 +860,7 @@ namespace ColorfulApp
 
         private void расписаниеКлассовToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (ChangesHappend)
+            if (_changesHappend)
             {
                 Data.Instance.Lessons.Clear();
                 foreach (LessonEditor le in Data.Instance.LessonEditors)
@@ -873,7 +870,7 @@ namespace ColorfulApp
                         Data.Instance.Lessons.Add(new Lesson(le.Lesson.Teacher, le.Lesson.Cls, le.Lesson.Subject));
                     }
                 }
-                ChangesHappend = false;
+                _changesHappend = false;
             }
             Thread t = new Thread(CalculationThread);
             t.Start();
@@ -899,13 +896,13 @@ namespace ColorfulApp
 
         private void полученноеРасписаниеToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            var sheduleForm = new SheduleForm(shedule);
+            var sheduleForm = new SheduleForm(_shedule);
             sheduleForm.ShowDialog();
         }
 
         private void расписаниеУчителейToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            var sheduleForm = new SheduleForm(teacherShedule);
+            var sheduleForm = new SheduleForm(_teacherShedule);
             sheduleForm.ShowDialog();
         }
     }

@@ -1,39 +1,27 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Data;
-using System.Drawing;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace ColorfulApp
 {
     public partial class SubjectTypesForm : Form
     {
-        BindingList<Subject> techSubj;
-        BindingList<Subject> naturalSubj;
         public SubjectTypesForm()
         {
             InitializeComponent();
-            techSubj = new BindingList<Subject>();
-            naturalSubj = new BindingList<Subject>();
-            foreach(Subject s in Data.Instance.Subjects)
-            {
-                if (s.IsTechnicalSubject)
-                    techSubj.Add(s);
-                else
-                    naturalSubj.Add(s);
-            }
-            lbTech.DataSource = techSubj;
-            lbNaturalScience.DataSource = naturalSubj;
+
+            TechSubjects = new BindingList<Subject>(Data.Instance.Subjects.Where(x => x.IsTechnicalSubject).ToList());
+            NaturalSubject = new BindingList<Subject>(Data.Instance.Subjects.Where(x => !x.IsTechnicalSubject).ToList());
+
+            lbTech.DataSource = TechSubjects;
+            lbNaturalScience.DataSource = NaturalSubject;
             lbNaturalScience.DisplayMember = "Name";
             lbTech.DisplayMember = "Name";
         }
 
-        public BindingList<Subject> TechSubj { get => techSubj; set => techSubj = value; }
-        public BindingList<Subject> NaturalSubj { get => naturalSubj; set => naturalSubj = value; }
+        public BindingList<Subject> TechSubjects { get; set; }
+        public BindingList<Subject> NaturalSubject { get; set; }
 
         #region Drag&Drop
         private void lbTech_MouseDown(object sender, MouseEventArgs e)
@@ -43,13 +31,12 @@ namespace ColorfulApp
                 return;            
             lbNaturalScience.AllowDrop = true;
             
-            Subject s = techSubj[index];
-            DragDropEffects dde1 = DoDragDrop(s,
-                DragDropEffects.All);
+            Subject s = TechSubjects[index];
+            DragDropEffects dde1 = DoDragDrop(s, DragDropEffects.All);
 
             if (dde1 == DragDropEffects.All)
             {
-                techSubj.RemoveAt(index);
+                TechSubjects.RemoveAt(index);
             }
         }
 
@@ -61,14 +48,14 @@ namespace ColorfulApp
         private void lbNaturalScience_DragDrop(object sender, DragEventArgs e)
         {
             Subject str = (Subject)e.Data.GetData(typeof(Subject));
-            naturalSubj.Add(str);
+            NaturalSubject.Add(str);
             lbNaturalScience.AllowDrop = false;
         }
 
         private void lbTech_DragDrop(object sender, DragEventArgs e)
         {
             Subject str = (Subject)e.Data.GetData(typeof(Subject));
-            techSubj.Add(str);
+            TechSubjects.Add(str);
             lbTech.AllowDrop = false;
         }
 
@@ -84,13 +71,13 @@ namespace ColorfulApp
                 return;
             lbTech.AllowDrop = true;
 
-            Subject s = naturalSubj[index];
+            Subject s = NaturalSubject[index];
             DragDropEffects dde1 = DoDragDrop(s,
                 DragDropEffects.All);
 
             if (dde1 == DragDropEffects.All)
             {
-                naturalSubj.RemoveAt(index);
+                NaturalSubject.RemoveAt(index);
             }
         }
         #endregion
@@ -99,8 +86,8 @@ namespace ColorfulApp
         {
             if (lbTech.SelectedIndex != -1)
             {
-                naturalSubj.Add(techSubj[lbTech.SelectedIndex]);
-                techSubj.RemoveAt(lbTech.SelectedIndex);
+                NaturalSubject.Add(TechSubjects[lbTech.SelectedIndex]);
+                TechSubjects.RemoveAt(lbTech.SelectedIndex);
             }
         }
 
@@ -108,8 +95,8 @@ namespace ColorfulApp
         {
             if (lbNaturalScience.SelectedIndex != -1)
             {
-                techSubj.Add(naturalSubj[lbNaturalScience.SelectedIndex]);
-                naturalSubj.RemoveAt(lbNaturalScience.SelectedIndex);
+                TechSubjects.Add(NaturalSubject[lbNaturalScience.SelectedIndex]);
+                NaturalSubject.RemoveAt(lbNaturalScience.SelectedIndex);
             }
         }
     }
