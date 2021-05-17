@@ -17,15 +17,15 @@ namespace ColorfulApp
         public TeacherAddEditForm(Teacher teacher = null)
         {
             InitializeComponent();            
-            clbSubjects.DataSource = Data.Instance.SubjList;
+            clbSubjects.DataSource = Data.Instance.Subjects;
             clbSubjects.DisplayMember = "Name";
             if (teacher != null)
             {
                 curTeacher = teacher;
                 tbFIO.Text = teacher.Name;
                 Name = "Редактирование учителя";
-                for (int i = 0; i < Data.Instance.SubjList.Count; i++)
-                    if (teacher.Subjs.Contains(Data.Instance.SubjList[i]))
+                for (int i = 0; i < Data.Instance.Subjects.Count; i++)
+                    if (teacher.Subjects.Contains(Data.Instance.Subjects[i]))
                         clbSubjects.SetItemChecked(i, true);
             }
             else
@@ -41,10 +41,10 @@ namespace ColorfulApp
         private void btOK_Click(object sender, EventArgs e)
         {
             curTeacher.Name = tbFIO.Text;
-            curTeacher.Subjs = new HashSet<Subject> ();
+            curTeacher.Subjects = new HashSet<Subject> ();
             foreach (Subject s in clbSubjects.CheckedItems)
             {
-                curTeacher.Subjs.Add(s);
+                curTeacher.Subjects.Add(s);
             }
             DialogResult = DialogResult.OK;
             Close();

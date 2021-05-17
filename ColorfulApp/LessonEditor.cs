@@ -1,16 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace ColorfulApp
+﻿namespace ColorfulApp
 {
     public class LessonEditor
     {
-        int count;
-        Lesson lesson;
-
+        // todo: используется?
         public LessonEditor()
         {
             Count = 0;
@@ -22,11 +14,10 @@ namespace ColorfulApp
             Lesson = les;
         }
 
-        public int Count { get => count; set => count = value; }
-        public Lesson Lesson { get => lesson; set => lesson = value; }
-
-        public string Teacher { get => lesson.Teacher.Name; }
-        public string Subject { get => lesson.Subject.Name; }
-        public string Class { get => lesson.Cls.Name; }
+        public int Count { get; set; }
+        public Lesson Lesson { get; set; }
+        public string Teacher => Lesson.Teacher.Name;
+        public string Subject => Lesson.Subject.Name;
+        public string Class => Lesson.Cls.Name;
     }
 }

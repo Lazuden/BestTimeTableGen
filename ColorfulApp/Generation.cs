@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace ColorfulApp
@@ -10,60 +9,56 @@ namespace ColorfulApp
     // Популяция
     class Generation
     {
-        List<Individual> Individs;
-
-        int rateSum;
-        int maxRate;
-        int aveRate;
-        double Dispersion;
+        private List<Individual> _individs;
+        private int _rateSum;
+        private int _maxRate;
+        private int _aveRate;
+        private double _dispersion;
 
         public Generation()
         {
-            Individs = new List<Individual>(Properties.Settings.Default.PopulationCount);
+            _individs = new List<Individual>(Properties.Settings.Default.PopulationCount);
             GenerateStartPopulation();
             CalcStats();
         }
 
         public void Next()
         {
-            int randomCount = Individs.Count * 20 / 100;
-            int childsCount = Individs.Count * 60 / 100;
-            int lastCount = Individs.Count - randomCount - childsCount;
-            Rand.Shuffle(Individs);
-            List<Individual> childs = new List<Individual>(childsCount);
-            List<Individual> random = new List<Individual>(Individs.Skip(Math.Max(0, Individs.Count - randomCount)));
+            int randomCount = _individs.Count * 20 / 100;
+            int childsCount = _individs.Count * 60 / 100;
+            int lastCount = _individs.Count - randomCount - childsCount;
+            Rand.Shuffle(_individs);
+            var childs = new List<Individual>(childsCount);
+            var random = new List<Individual>(_individs.Skip(Math.Max(0, _individs.Count - randomCount)));
 
             int index, firstRnd, firstParent, secondRnd, secondParent, curSum;
             for (int i = 0; i < 30; i++)
             {
                 index = curSum = firstParent = secondParent = 0;
-                firstRnd = ThreadSafeRandom.ThisThreadsRandom.Next(rateSum);
-                secondRnd = ThreadSafeRandom.ThisThreadsRandom.Next(rateSum);
-                while(index + 1 < Individs.Count && (curSum < firstRnd || curSum < secondRnd))
+                firstRnd = ThreadSafeRandom.ThisThreadsRandom.Next(_rateSum);
+                secondRnd = ThreadSafeRandom.ThisThreadsRandom.Next(_rateSum);
+                while (index + 1 < _individs.Count && (curSum < firstRnd || curSum < secondRnd))
                 {
                     if (curSum < firstRnd)
                         firstParent++;
                     if (curSum < secondRnd)
                         secondParent++;
-                    curSum += Individs[index++].Rating;
+                    curSum += _individs[index++].Rating;
                 }
-                firstParent = firstParent > Individs.Count ? Individs.Count - 1 : firstParent;
-                secondParent = secondParent > Individs.Count ? Individs.Count - 1 : firstParent; 
-                childs.Add(new Individual(Individs[firstParent], Individs[secondParent]));
-                childs.Add(new Individual(Individs[secondParent], Individs[firstParent]));                
+                firstParent = firstParent > _individs.Count ? _individs.Count - 1 : firstParent;
+                secondParent = secondParent > _individs.Count ? _individs.Count - 1 : firstParent;
+                childs.Add(new Individual(_individs[firstParent], _individs[secondParent]));
+                childs.Add(new Individual(_individs[secondParent], _individs[firstParent]));
             }
 
-            Individs.Sort(delegate (Individual x, Individual y)
-            {
-                return -x.Rating.CompareTo(y.Rating);
-            });
+            _individs.Sort((x, y) => -x.Rating.CompareTo(y.Rating));
 
             Parallel.ForEach(childs, (curChild) => curChild.BuildAndColorize());
 
-            Individs.RemoveRange(lastCount, Individs.Count - lastCount);
+            _individs.RemoveRange(lastCount, _individs.Count - lastCount);
 
-            Individs.AddRange(childs);
-            Individs.AddRange(random);
+            _individs.AddRange(childs);
+            _individs.AddRange(random);
             CalcStats();
         }
 
@@ -72,42 +67,41 @@ namespace ColorfulApp
             Data.Instance.InitializeSupportData();
             int startCount = Data.Instance.IndividualCount;
             for (int i = 0; i < startCount; i++)
-                Individs.Add(new Individual());
-            Parallel.ForEach(Individs, (curIndivid) => curIndivid.BuildAndColorize());
+                _individs.Add(new Individual());
+            Parallel.ForEach(_individs, (curIndivid) => curIndivid.BuildAndColorize());
         }
 
         private void CalcStats()
         {
-            Dispersion = rateSum = aveRate = maxRate = 0;
-            foreach (Individual indiv in Individs)
+            _dispersion = _rateSum = _aveRate = _maxRate = 0;
+            foreach (Individual indiv in _individs)
             {
-                maxRate = indiv.Rating > maxRate ? indiv.Rating : maxRate;
-                rateSum += indiv.Rating;
+                _maxRate = indiv.Rating > _maxRate ? indiv.Rating : _maxRate;
+                _rateSum += indiv.Rating;
             }
 
-            aveRate = rateSum/Individs.Count;
+            _aveRate = _rateSum / _individs.Count;
 
-            foreach (Individual indiv in Individs)
+            foreach (Individual indiv in _individs)
             {
-                Dispersion += Math.Pow((indiv.Rating - aveRate), 2);
+                _dispersion += Math.Pow(indiv.Rating - _aveRate, 2);
             }
-            Dispersion /= Individs.Count;
+            _dispersion /= _individs.Count;
         }
 
         public override string ToString()
         {
-            return String.Format("maxRate: {0}, aveRate: {1}, dispersion: {2, -8} \n", maxRate, aveRate, Dispersion);
-            //return Dispersion.ToString() + '\n';
+            return $"maxRate: {_maxRate}, aveRate: {_aveRate}, dispersion: {_dispersion,-8} \n";
         }
 
         public DataTable BestSolution()
         {
-            return Individs.Max().CreateTimeTable();
+            return _individs.Max().CreateTimeTable();
         }
 
         public DataTable TeacherTable()
         {
-            return Individs.Max().CreateTeacherTimeTable();
+            return _individs.Max().CreateTeacherTimeTable();
         }
     }
 }

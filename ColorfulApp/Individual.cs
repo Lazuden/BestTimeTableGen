@@ -1,15 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data;
 using System.Data.SQLite;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ColorfulApp
 {
     // Особь
-    class Individual : IComparable<Individual>
+    public class Individual : IComparable<Individual>
     {
         public int[] StrikeOrder { get; private set; }
         public int[] ColorizeOrder { get; private set; }
@@ -53,76 +49,6 @@ namespace ColorfulApp
                 Mutate();
         }
 
-        public DataTable CreateTimeTable()
-        {
-            int clsCount = Data.Instance.Classes.Count;
-            Dictionary<int, Dictionary<int, Lesson>> TimeTable = new Dictionary<int, Dictionary<int, Lesson>>(clsCount);
-            foreach (int key in Data.Instance.Classes.Keys)
-                TimeTable.Add(key, new Dictionary<int, Lesson>());
-            // подготовка таблицы для расписания ^^^
-            for (int i = 0; i < Data.Instance.N; i++)
-                TimeTable[Data.Instance.LL[i].Cls.Id].Add(Colors[i], Data.Instance.LL[i]);
-
-
-            DataTable dt = new DataTable();
-            dt.Columns.Add("уроки\\классы");
-            string[] tmpList = new string[31];
-            for (int i = 1; i < 31; i++)
-            {
-                dt.Columns.Add(i.ToString());                
-            }
-
-            Lesson curLes;
-            foreach (Dictionary<int, Lesson> clsTimeTable in TimeTable.Values)
-            {
-                tmpList[0] = clsTimeTable.First().Value.Cls.Name;
-                for (int i = 1; i < 31; i++)
-                {
-                    curLes = null;
-                    clsTimeTable.TryGetValue(i, out curLes);
-                    tmpList[i] = curLes?.ToString() ?? "-----------";
-                }
-                dt.Rows.Add(tmpList);
-            }
-            DataTable correctTable = WorkWithExcel.GenerateTransposedTable(dt);            
-            return correctTable;
-        }
-
-        public DataTable CreateTeacherTimeTable()
-        {
-            int clsCount = Data.Instance.Classes.Count;
-            Dictionary<int, Dictionary<int, Lesson>> TimeTable = new Dictionary<int, Dictionary<int, Lesson>>(clsCount);
-            foreach (int key in Data.Instance.Teachers.Keys)
-                TimeTable.Add(key, new Dictionary<int, Lesson>());
-            // подготовка таблицы для расписания ^^^
-            for (int i = 0; i < Data.Instance.N; i++)
-                TimeTable[Data.Instance.LL[i].Teacher.Id].Add(Colors[i], Data.Instance.LL[i]);
-
-
-            DataTable dt = new DataTable();
-            dt.Columns.Add("уроки\\Учителя");
-            string[] tmpList = new string[31];
-            for (int i = 1; i < 31; i++)
-            {
-                dt.Columns.Add(i.ToString());
-            }
-
-            Lesson curLes;
-            foreach (Dictionary<int, Lesson> teacherTimeTable in TimeTable.Values)
-            {
-                tmpList[0] = teacherTimeTable.First().Value.Teacher.Name;
-                for (int i = 1; i < 31; i++)
-                {
-                    curLes = null;
-                    teacherTimeTable.TryGetValue(i, out curLes);
-                    tmpList[i] = curLes?.Info ?? "-----------";
-                }
-                dt.Rows.Add(tmpList);
-            }
-            DataTable correctTable = WorkWithExcel.GenerateTransposedTable(dt);
-            return correctTable;
-        }
-
         public void BuildAndColorize()
         {
             ColorizeByOrder();
@@ -143,8 +69,8 @@ namespace ColorfulApp
             // подготовка таблицы для расписания ^^^
             for (int i = 0; i < Data.Instance.N; i++)
             {
-                clsTimeTable[Data.Instance.LL[i].Cls.Id].Add(Colors[i], Data.Instance.LL[i]);
-                teacherTimeTable[Data.Instance.LL[i].Teacher.Id].Add(Colors[i], Data.Instance.LL[i]);
+                clsTimeTable[Data.Instance.Lessons[i].Cls.Id].Add(Colors[i], Data.Instance.Lessons[i]);
+                teacherTimeTable[Data.Instance.Lessons[i].Teacher.Id].Add(Colors[i], Data.Instance.Lessons[i]);
             }
 
             // подсчет рейтинга
@@ -251,9 +177,9 @@ namespace ColorfulApp
             string result = "";
             for (int i = 0; i < Data.Instance.N; i++)
             {
-                Lesson l = Data.Instance.LL[i];
+                Lesson l = Data.Instance.Lessons[i];
                 int time = Colors[i];
-                result += $"({l.Teacher.Id}, {l.Cls.Id}, {Data.Instance.SubjList.IndexOf(l.Subject)}, {(time - 1) / 6}, {(time - 1) % 6})";
+                result += $"({l.Teacher.Id}, {l.Cls.Id}, {Data.Instance.Subjects.IndexOf(l.Subject)}, {(time - 1) / 6}, {(time - 1) % 6})";
                 if (i != Data.Instance.N - 1)
                 {
                     result += ", ";
@@ -286,7 +212,7 @@ namespace ColorfulApp
 
         private bool IsAdjacent(int i, int j)
         {
-            return Data.Instance.Mas[Data.Instance.LL[ColorizeOrder[i]].Id, Data.Instance.LL[ColorizeOrder[j]].Id];
+            return Data.Instance.Mas[Data.Instance.Lessons[ColorizeOrder[i]].Id, Data.Instance.Lessons[ColorizeOrder[j]].Id];
         }
 
         private void Encode() // закодировать - приведение к виду, удобному для скрещивания
@@ -331,7 +257,7 @@ namespace ColorfulApp
 
         int IComparable<Individual>.CompareTo(Individual other)
         {
-            return Rating.CompareTo(other.Rating);
+            return -Rating.CompareTo(other.Rating);
         }
     }
 }

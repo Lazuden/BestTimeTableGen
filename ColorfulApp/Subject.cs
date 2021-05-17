@@ -1,29 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace ColorfulApp
+﻿namespace ColorfulApp
 {
     public class Subject
     {
-        string name;
-        bool isTechnicalSubject;
-
-        public string Name { get => name; set => name = value; }
-        public bool IsTechnicalSubject { get => isTechnicalSubject; set => isTechnicalSubject = value; }
+        public string Name { get; set; }
+        public bool IsTechnicalSubject { get; set; }
 
         public Subject(string val, bool tech = false)
         {
-            name = val;
-            isTechnicalSubject = tech;
+            Name = val;
+            IsTechnicalSubject = tech;
         }
 
         public Subject()
         {
 
         }
-
     }
 }

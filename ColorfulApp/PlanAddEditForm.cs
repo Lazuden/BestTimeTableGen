@@ -23,7 +23,7 @@ namespace ColorfulApp
             cbClass.DisplayMember = "Name";
             cbClass.ValueMember = "Id";
 
-            cbSubject.DataSource = Data.Instance.Teachers[(int)cbTeacher.SelectedValue].Subjs.ToList();
+            cbSubject.DataSource = Data.Instance.Teachers[(int)cbTeacher.SelectedValue].Subjects.ToList();
             cbSubject.DisplayMember = "Name";
 
             

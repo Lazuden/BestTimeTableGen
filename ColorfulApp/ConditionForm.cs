@@ -287,8 +287,8 @@ namespace ColorfulApp
             switch (exprType)
             {
                 case VarTypes.Subject:
-                    var subject = Data.Instance.SubjList.Where((Subject subj) => subj.Name == m.Value).First();
-                    id = Data.Instance.SubjList.IndexOf(subject);
+                    var subject = Data.Instance.Subjects.Where((Subject subj) => subj.Name == m.Value).First();
+                    id = Data.Instance.Subjects.IndexOf(subject);
                     break;
                 case VarTypes.Teacher:
                     var teacher = Data.Instance.Teachers.Values.Where((Teacher t) => t.Name == m.Value).First();

@@ -1,50 +1,46 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data;
-using System.Drawing;
 using System.IO;
-using System.Linq;
 using System.Runtime.Serialization.Formatters.Binary;
-using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 using System.Windows.Forms;
-using System.Xml.Serialization;
 
 namespace ColorfulApp
 {
     public partial class MainForm : Form
     {
-        string FileName;
-        BindingSource lessonsBs;
-        BinaryFormatter bf;
-        DataTable shedule, teacherShedule;
-        bool ChangesHappend;
+        private string _fileName;
+        private BindingSource _lessonsBs;
+        private BinaryFormatter _bf;
+        private DataTable _shedule;
+        private DataTable _teacherShedule;
+        private bool _changesHappend;
 
         public MainForm()
         {
             InitializeComponent();
-            bf = new BinaryFormatter();
-
+            _bf = new BinaryFormatter();
 
             // Временно при загрузке, чтобы вечно не тыкать
             FillStartData();
-            lessonsBs = new BindingSource();
-            lessonsBs.DataSource = Data.Instance.LessonEditors;
+            _lessonsBs = new BindingSource
+            {
+                DataSource = Data.Instance.LessonEditors
+            };
 
             dgvPlan.AutoGenerateColumns = false;
-            dgvPlan.DataSource = lessonsBs;            
-            ChangesHappend = false;
+            dgvPlan.DataSource = _lessonsBs;
+            _changesHappend = false;
         }
 
         private void FillStartData()
         {
-            Data.Instance.LL = new List<Lesson>();
+            Data.Instance.Lessons = new List<Lesson>();
             Data.Instance.LessonEditors = new List<LessonEditor>();
 
             #region SubjectsWrite
-            Data.Instance.SubjList = new List<Subject>()
+            Data.Instance.Subjects = new List<Subject>()
             {
                 new Subject("Математика", true),        // 0
                 new Subject("Алгебра", true),           // 1
@@ -70,39 +66,39 @@ namespace ColorfulApp
             Data.Instance.Teachers = new Dictionary<int, Teacher>
             {
                 // 5 класс
-                { 1, new Teacher(1, "Иванов В.В.", new HashSet<Subject>{ Data.Instance.SubjList[3], Data.Instance.SubjList[4]} ) },// русский литература
-                { 2, new Teacher(2, "Петров К.С.", new HashSet<Subject>{ Data.Instance.SubjList[5]}) }, // Английский язык
-                { 3, new Teacher(3, "Климов М.Т.", new HashSet<Subject>{ Data.Instance.SubjList[0], Data.Instance.SubjList[1], Data.Instance.SubjList[2]}) }, // математика алгебра геометрия
-                { 4, new Teacher(4, "Гаврилова О.И.", new HashSet<Subject>{ Data.Instance.SubjList[6], Data.Instance.SubjList[7]}) },// История обществознание
-                { 5, new Teacher(5, "Тунчак С.К.", new HashSet<Subject>{ Data.Instance.SubjList[8]})}, // География
-                { 6, new Teacher(6, "Лотуш Е.М.", new HashSet<Subject>{ Data.Instance.SubjList[9]}) }, // Биология
-                { 7, new Teacher(7, "Кринчук М.В.", new HashSet<Subject>{ Data.Instance.SubjList[10]}) }, // Музыка
-                { 8, new Teacher(8, "Кхалова С.С.", new HashSet<Subject>{ Data.Instance.SubjList[11]}) }, // ИЗО
-                { 9, new Teacher(9, "Тоттава Н.И.", new HashSet<Subject>{ Data.Instance.SubjList[12]}) }, // Технология
-                { 10, new Teacher(10, "Мордлина Г.А.", new HashSet<Subject>{ Data.Instance.SubjList[13]}) },// физкультура
+                { 1, new Teacher(1, "Иванов В.В.", new HashSet<Subject>{ Data.Instance.Subjects[3], Data.Instance.Subjects[4]} ) },// русский литература
+                { 2, new Teacher(2, "Петров К.С.", new HashSet<Subject>{ Data.Instance.Subjects[5]}) }, // Английский язык
+                { 3, new Teacher(3, "Климов М.Т.", new HashSet<Subject>{ Data.Instance.Subjects[0], Data.Instance.Subjects[1], Data.Instance.Subjects[2]}) }, // математика алгебра геометрия
+                { 4, new Teacher(4, "Гаврилова О.И.", new HashSet<Subject>{ Data.Instance.Subjects[6], Data.Instance.Subjects[7]}) },// История обществознание
+                { 5, new Teacher(5, "Тунчак С.К.", new HashSet<Subject>{ Data.Instance.Subjects[8]})}, // География
+                { 6, new Teacher(6, "Лотуш Е.М.", new HashSet<Subject>{ Data.Instance.Subjects[9]}) }, // Биология
+                { 7, new Teacher(7, "Кринчук М.В.", new HashSet<Subject>{ Data.Instance.Subjects[10]}) }, // Музыка
+                { 8, new Teacher(8, "Кхалова С.С.", new HashSet<Subject>{ Data.Instance.Subjects[11]}) }, // ИЗО
+                { 9, new Teacher(9, "Тоттава Н.И.", new HashSet<Subject>{ Data.Instance.Subjects[12]}) }, // Технология
+                { 10, new Teacher(10, "Мордлина Г.А.", new HashSet<Subject>{ Data.Instance.Subjects[13]}) },// физкультура
                 // 6 класс
-                { 11, new Teacher(11, "Скрипка Р.Н.", new HashSet<Subject>{ Data.Instance.SubjList[3], Data.Instance.SubjList[4]})}, // Русский Литература
-                { 12, new Teacher(12, "Кривоухова С.А.", new HashSet<Subject>{ Data.Instance.SubjList[0]}) }, // Математика
+                { 11, new Teacher(11, "Скрипка Р.Н.", new HashSet<Subject>{ Data.Instance.Subjects[3], Data.Instance.Subjects[4]})}, // Русский Литература
+                { 12, new Teacher(12, "Кривоухова С.А.", new HashSet<Subject>{ Data.Instance.Subjects[0]}) }, // Математика
                 // 7 класс
-                { 13, new Teacher(13, "Орлова И.Н.", new HashSet<Subject>{ Data.Instance.SubjList[3], Data.Instance.SubjList[4]})}, // Русский Литература
-                { 14, new Teacher(14, "Усынбаева В.Е.", new HashSet<Subject>{ Data.Instance.SubjList[5]}) }, // Английский язык
-                { 15, new Teacher(15, "Сычева Е.Г.", new HashSet<Subject>{ Data.Instance.SubjList[0], Data.Instance.SubjList[1], Data.Instance.SubjList[2] }) }, // математика алгебра геометрия
-                { 16, new Teacher(16, "Копылова Т.А.", new HashSet<Subject>{ Data.Instance.SubjList[14]} ) }, // Физика
-                { 17, new Teacher(17, "Руков К.Г.", new HashSet<Subject>{ Data.Instance.SubjList[6], Data.Instance.SubjList[7]}) }, // История/обществознание 
+                { 13, new Teacher(13, "Орлова И.Н.", new HashSet<Subject>{ Data.Instance.Subjects[3], Data.Instance.Subjects[4]})}, // Русский Литература
+                { 14, new Teacher(14, "Усынбаева В.Е.", new HashSet<Subject>{ Data.Instance.Subjects[5]}) }, // Английский язык
+                { 15, new Teacher(15, "Сычева Е.Г.", new HashSet<Subject>{ Data.Instance.Subjects[0], Data.Instance.Subjects[1], Data.Instance.Subjects[2] }) }, // математика алгебра геометрия
+                { 16, new Teacher(16, "Копылова Т.А.", new HashSet<Subject>{ Data.Instance.Subjects[14]} ) }, // Физика
+                { 17, new Teacher(17, "Руков К.Г.", new HashSet<Subject>{ Data.Instance.Subjects[6], Data.Instance.Subjects[7]}) }, // История/обществознание 
                 // 8 класс
-                { 18, new Teacher(18, "Кирюшина У.Э.", new HashSet<Subject>{ Data.Instance.SubjList[3], Data.Instance.SubjList[4]})}, // Русский Литература
-                { 19, new Teacher(19, "Романова Е.К.", new HashSet<Subject>{ Data.Instance.SubjList[0], Data.Instance.SubjList[1], Data.Instance.SubjList[2]})}, // математика алгебра геометрия
-                { 20, new Teacher(20, "Дитрова Н.А.", new HashSet<Subject>{ Data.Instance.SubjList[16]})}, // Информатика
-                { 21, new Teacher(21, "Кочубеев О.В.", new HashSet<Subject>{ Data.Instance.SubjList[15]})}, // Химия
-                { 22, new Teacher(22, "Конюхов К.Е.", new HashSet<Subject>{ Data.Instance.SubjList[13]})}, // Физкультура
+                { 18, new Teacher(18, "Кирюшина У.Э.", new HashSet<Subject>{ Data.Instance.Subjects[3], Data.Instance.Subjects[4]})}, // Русский Литература
+                { 19, new Teacher(19, "Романова Е.К.", new HashSet<Subject>{ Data.Instance.Subjects[0], Data.Instance.Subjects[1], Data.Instance.Subjects[2]})}, // математика алгебра геометрия
+                { 20, new Teacher(20, "Дитрова Н.А.", new HashSet<Subject>{ Data.Instance.Subjects[16]})}, // Информатика
+                { 21, new Teacher(21, "Кочубеев О.В.", new HashSet<Subject>{ Data.Instance.Subjects[15]})}, // Химия
+                { 22, new Teacher(22, "Конюхов К.Е.", new HashSet<Subject>{ Data.Instance.Subjects[13]})}, // Физкультура
                 // 9 класс
-                { 23, new Teacher(23, "Нулотова Е.В.", new HashSet<Subject>{Data.Instance.SubjList[3], Data.Instance.SubjList[4] })}, // Русский Литература
-                { 24, new Teacher(24, "Гурсина Р.В.", new HashSet<Subject>{ Data.Instance.SubjList[0]}) }, // Математика
-                { 25, new Teacher(25, "Препода У.К.", new HashSet<Subject>{ Data.Instance.SubjList[5]}) }, // Английский язык
-                { 26, new Teacher(26, "Щукина М.С.", new HashSet<Subject>{ Data.Instance.SubjList[6], Data.Instance.SubjList[7]}) }, // История/обществознание 
-                { 27, new Teacher(27, "Пискунова Л.В.", new HashSet<Subject>{ Data.Instance.SubjList[8]})}, // География
-                { 28, new Teacher(28, "Ипатова Г.У.", new HashSet<Subject>{ Data.Instance.SubjList[9] }) }, // Биология
-                { 29, new Teacher(29, "Плетунов К.В.", new HashSet<Subject>{ Data.Instance.SubjList[13] })}, // Физкультура
+                { 23, new Teacher(23, "Нулотова Е.В.", new HashSet<Subject>{Data.Instance.Subjects[3], Data.Instance.Subjects[4] })}, // Русский Литература
+                { 24, new Teacher(24, "Гурсина Р.В.", new HashSet<Subject>{ Data.Instance.Subjects[0]}) }, // Математика
+                { 25, new Teacher(25, "Препода У.К.", new HashSet<Subject>{ Data.Instance.Subjects[5]}) }, // Английский язык
+                { 26, new Teacher(26, "Щукина М.С.", new HashSet<Subject>{ Data.Instance.Subjects[6], Data.Instance.Subjects[7]}) }, // История/обществознание 
+                { 27, new Teacher(27, "Пискунова Л.В.", new HashSet<Subject>{ Data.Instance.Subjects[8]})}, // География
+                { 28, new Teacher(28, "Ипатова Г.У.", new HashSet<Subject>{ Data.Instance.Subjects[9] }) }, // Биология
+                { 29, new Teacher(29, "Плетунов К.В.", new HashSet<Subject>{ Data.Instance.Subjects[13] })}, // Физкультура
             };
             #endregion
 
@@ -128,11 +124,11 @@ namespace ColorfulApp
             #endregion
 
             #region LessonWrite
-            List<Lesson> lessons = Data.Instance.LL;
+            List<Lesson> lessons = Data.Instance.Lessons;
             List<LessonEditor> lesEdit = Data.Instance.LessonEditors;
             Dictionary<int, Teacher> teachers = Data.Instance.Teachers;
             Dictionary<int, tClass> classes = Data.Instance.Classes;
-            List<Subject> subjects = Data.Instance.SubjList;
+            List<Subject> subjects = Data.Instance.Subjects;
 
 
 
@@ -737,8 +733,8 @@ namespace ColorfulApp
                 gen.Next();
                 rtbOutput.Invoke(new Action(() => rtbOutput.Text += gen.ToString()));                
             }
-            shedule = gen.BestSolution();
-            teacherShedule = gen.TeacherTable();
+            _shedule = gen.BestSolution();
+            _teacherShedule = gen.TeacherTable();
         }
 
         private void сохранитьКакToolStripMenuItem_Click(object sender, EventArgs e)
@@ -755,25 +751,25 @@ namespace ColorfulApp
             };
             if (sfd.ShowDialog() == DialogResult.OK)
             {
-                FileName = sfd.FileName;
-                Text = "Оболочка баз знаний : " + Path.GetFileNameWithoutExtension(FileName);
-                Data.Instance.Name = Path.GetFileNameWithoutExtension(FileName);
+                _fileName = sfd.FileName;
+                Text = "Оболочка баз знаний : " + Path.GetFileNameWithoutExtension(_fileName);
+                Data.Instance.Name = Path.GetFileNameWithoutExtension(_fileName);
                 SaveFile();
             }
         }
 
         private void SaveFile()
         {
-            using (FileStream fs = new FileStream(FileName, FileMode.Create))
+            using (FileStream fs = new FileStream(_fileName, FileMode.Create))
             {
-                bf.Serialize(fs, Data.Instance);
+                _bf.Serialize(fs, Data.Instance);
                 MessageBox.Show("Сохранено успешно!");
             }
         }
 
         private void сохранитьToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (String.IsNullOrEmpty(FileName))
+            if (String.IsNullOrEmpty(_fileName))
                 ChooseFilePathToSave();
             else
                 SaveFile();
@@ -788,32 +784,31 @@ namespace ColorfulApp
             };
             if (ofd.ShowDialog() == DialogResult.OK)
             {
-                FileName = ofd.FileName;
-                Text = "Файл генератора расписаний : " + Path.GetFileNameWithoutExtension(FileName);
+                _fileName = ofd.FileName;
+                Text = "Файл генератора расписаний : " + Path.GetFileNameWithoutExtension(_fileName);
                 OpenFile();
             }
         }
 
         private void OpenFile()
         {
-            using (FileStream fs = new FileStream(FileName, FileMode.Open))
+            using (FileStream fs = new FileStream(_fileName, FileMode.Open))
             {
                 try
                 {
-                    Data.Instance = (Data)bf.Deserialize(fs);
+                    Data.Instance = (Data)_bf.Deserialize(fs);
                 }
                 catch
                 {
                     MessageBox.Show("Ошибка открытия файла");
                 }
-
             }
         }
 
         private void экспортВExcelToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (shedule != null)
-                WorkWithExcel.ExportToExcel(shedule);
+            if (_shedule != null)
+                WorkWithExcel.ExportToExcel(_shedule);
         }
 
         private void показатьЛогToolStripMenuItem_Click(object sender, EventArgs e)
@@ -829,7 +824,7 @@ namespace ColorfulApp
             {
                 LessonEditor additionalLe = paef.GetLe();
                 Data.Instance.LessonEditors.Add(additionalLe);
-                ChangesHappend = true;
+                _changesHappend = true;
             }
         }
 
@@ -842,7 +837,7 @@ namespace ColorfulApp
                 {
                     LessonEditor changingLe = paef.GetLe();
                     Data.Instance.LessonEditors[dgvPlan.SelectedCells[0].RowIndex] = changingLe;
-                    ChangesHappend = true;
+                    _changesHappend = true;
                 }
             }
         }
@@ -864,17 +859,17 @@ namespace ColorfulApp
 
         private void расписаниеКлассовToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (ChangesHappend)
+            if (_changesHappend)
             {
-                Data.Instance.LL.Clear();
+                Data.Instance.Lessons.Clear();
                 foreach (LessonEditor le in Data.Instance.LessonEditors)
                 {
                     for (int i = 0; i < le.Count; i++)
                     {
-                        Data.Instance.LL.Add(new Lesson(le.Lesson.Teacher, le.Lesson.Cls, le.Lesson.Subject));
+                        Data.Instance.Lessons.Add(new Lesson(le.Lesson.Teacher, le.Lesson.Cls, le.Lesson.Subject));
                     }
                 }
-                ChangesHappend = false;
+                _changesHappend = false;
             }
             Thread t = new Thread(CalculationThread);
             t.Start();
@@ -900,13 +895,13 @@ namespace ColorfulApp
 
         private void полученноеРасписаниеToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            var sheduleForm = new SheduleForm(shedule);
+            var sheduleForm = new SheduleForm(_shedule);
             sheduleForm.ShowDialog();
         }
 
         private void расписаниеУчителейToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            var sheduleForm = new SheduleForm(teacherShedule);
+            var sheduleForm = new SheduleForm(_teacherShedule);
             sheduleForm.ShowDialog();
         }
     }

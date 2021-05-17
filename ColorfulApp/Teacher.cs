@@ -1,53 +1,25 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ColorfulApp
 {
     [Serializable]
     public class Teacher
     {
-        int id;
-        string name;
-        HashSet<Subject> subjects;
-        
+        public string Name { get; set; }
 
-        public string Name
-        {
-            get { return name; }
-            set { name = value; }
-        }
+        public int Id { get; set; }
 
-        public int Id
-        {
-            get
-            {
-                return id;
-            }
+        public string SubjectsText => string.Join(", ", Subjects.Select(x => x.Name));
 
-            set
-            {
-                id = value;
-            }
-        }
-
-        public string SubjectsText
-        {
-            get
-            {
-                return String.Join(", ", subjects.Select(x => x.Name));
-            }
-        }
-
-        public HashSet<Subject> Subjs { get => subjects; set => subjects = value; }
+        public HashSet<Subject> Subjects { get; set; }
 
         public Teacher(int id, string name, HashSet<Subject> subjects)
         {
-            this.name = name;
-            this.id = id;
-            this.subjects = subjects;
+            Name = name;
+            Id = id;
+            Subjects = subjects;
         }
         public Teacher()
         {
