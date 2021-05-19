@@ -11,8 +11,6 @@ namespace ColorfulApp
 
         public int Id { get; set; }
 
-        public string SubjectsText => string.Join(", ", Subjects.Select(x => x.Name));
-
         public HashSet<Subject> Subjects { get; set; }
 
         public Teacher(int id, string name, HashSet<Subject> subjects)
@@ -24,7 +22,7 @@ namespace ColorfulApp
         public Teacher()
         {
 
-        // todo: не используется.
+        }        // todo: не используется.
         public string SubjectsText => string.Join(", ", Subjects.Select(x => x.Name));
     }
 }
