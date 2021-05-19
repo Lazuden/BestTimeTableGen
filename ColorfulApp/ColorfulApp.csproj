@@ -65,106 +65,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ClassListForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="ClassListForm.Designer.cs">
-      <DependentUpon>ClassListForm.cs</DependentUpon>
-    </Compile>
-    <Compile Include="ConditionForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="ConditionForm.Designer.cs">
-      <DependentUpon>ConditionForm.cs</DependentUpon>
-    </Compile>
-    <Compile Include="ExtensionMethods.cs" />
-    <Compile Include="Generation.cs" />
-    <Compile Include="Individual.cs" />
-    <Compile Include="InsertObject.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="InsertObject.Designer.cs">
-      <DependentUpon>InsertObject.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Lesson.cs" />
-    <Compile Include="LessonEditor.cs" />
-    <Compile Include="MainForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="MainForm.Designer.cs">
-      <DependentUpon>MainForm.cs</DependentUpon>
-    </Compile>
-    <Compile Include="PlanAddEditForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="PlanAddEditForm.Designer.cs">
-      <DependentUpon>PlanAddEditForm.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Rand.cs" />
-    <Compile Include="SettingsForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="SettingsForm.Designer.cs">
-      <DependentUpon>SettingsForm.cs</DependentUpon>
-    </Compile>
-    <Compile Include="SheduleForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="SheduleForm.Designer.cs">
-      <DependentUpon>SheduleForm.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Subject.cs" />
-    <Compile Include="SubjectForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="SubjectForm.Designer.cs">
-      <DependentUpon>SubjectForm.cs</DependentUpon>
-    </Compile>
-    <Compile Include="SubjectTypesForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="SubjectTypesForm.Designer.cs">
-      <DependentUpon>SubjectTypesForm.cs</DependentUpon>
-    </Compile>
-    <Compile Include="tClass.cs" />
-    <Compile Include="Teacher.cs" />
-    <Compile Include="TeacherAddEditForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="TeacherAddEditForm.Designer.cs">
-      <DependentUpon>TeacherAddEditForm.cs</DependentUpon>
-    </Compile>
-    <Compile Include="TeacherListForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="TeacherListForm.Designer.cs">
-      <DependentUpon>TeacherListForm.cs</DependentUpon>
-    </Compile>
-    <Compile Include="TeacherSettingsForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="TeacherSettingsForm.Designer.cs">
-      <DependentUpon>TeacherSettingsForm.cs</DependentUpon>
-    </Compile>
-    <Compile Include="WorkWithExcel.cs" />
-    <Compile Include="Data.cs" />
-    <EmbeddedResource Include="ClassListForm.resx">
-      <DependentUpon>ClassListForm.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="ConditionForm.resx">
-      <DependentUpon>ConditionForm.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="InsertObject.resx">
-      <DependentUpon>InsertObject.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="MainForm.resx">
-      <DependentUpon>MainForm.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="PlanAddEditForm.resx">
-      <DependentUpon>PlanAddEditForm.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
@@ -175,28 +76,6 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
-    <EmbeddedResource Include="SettingsForm.resx">
-      <DependentUpon>SettingsForm.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="SheduleForm.resx">
-      <DependentUpon>SheduleForm.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="SubjectForm.resx">
-      <DependentUpon>SubjectForm.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="SubjectTypesForm.resx">
-      <DependentUpon>SubjectTypesForm.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="TeacherAddEditForm.resx">
-      <DependentUpon>TeacherAddEditForm.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="TeacherListForm.resx">
-      <DependentUpon>TeacherListForm.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="TeacherSettingsForm.resx">
-      <DependentUpon>TeacherSettingsForm.cs</DependentUpon>
-    </EmbeddedResource>
-    <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
