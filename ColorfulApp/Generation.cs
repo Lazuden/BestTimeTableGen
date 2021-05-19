@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
@@ -92,6 +93,7 @@ namespace ColorfulApp
         public override string ToString()
         {
             return $"maxRate: {_maxRate}, aveRate: {_aveRate}, dispersion: {_dispersion,-8} \n";
+            //return Dispersion.ToString() + '\n';
         }
 
         public DataTable BestSolution()
