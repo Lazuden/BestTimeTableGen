@@ -59,8 +59,10 @@ namespace ColorfulApp
             Numbers = new int[N];
             for (int i = 0; i < N; i++)
             {
-                Numbers[i] = i;
+                Lessons[i].Id = i;
             }
+            CreateAdjacencyMatrix();
+            Numbers = Enumerable.Range(0, N).ToArray();
         }
 
         private void CreateAdjacencyMatrix()

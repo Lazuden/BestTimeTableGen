@@ -769,7 +769,7 @@ namespace ColorfulApp
 
         private void сохранитьToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (String.IsNullOrEmpty(_fileName))
+            if (string.IsNullOrEmpty(_fileName))
                 ChooseFilePathToSave();
             else
                 SaveFile();

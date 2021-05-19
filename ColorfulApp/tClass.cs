@@ -28,5 +28,12 @@ namespace ColorfulApp
             Id = -1;
             Rasp = new Dictionary<int, Lesson>();
         }
+
+        public int Id { get; set; }
+        public string Name { get; set; }
+
+        // todo: не используется.
+        [XmlIgnore]
+        public Dictionary<int, Lesson> Rasp { get; set; }
     }
 }

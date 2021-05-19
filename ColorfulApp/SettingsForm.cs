@@ -1,11 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace ColorfulApp
@@ -22,12 +16,12 @@ namespace ColorfulApp
 
         private void nudGenerationCount_ValueChanged(object sender, EventArgs e)
         {
-            Data.Instance.GenerationCount = Decimal.ToInt32(nudGenerationCount.Value);
+            Data.Instance.GenerationCount = decimal.ToInt32(nudGenerationCount.Value);
         }
 
         private void nudIndividualsCount_ValueChanged(object sender, EventArgs e)
         {
-            Data.Instance.IndividualCount = Decimal.ToInt32(nudIndividualsCount.Value);
+            Data.Instance.IndividualCount = decimal.ToInt32(nudIndividualsCount.Value);
         }
 
         private void cbWindowStudents_CheckedChanged(object sender, EventArgs e)
@@ -45,9 +39,9 @@ namespace ColorfulApp
             var subjTypeForm = new SubjectTypesForm();
             if (subjTypeForm.ShowDialog() == DialogResult.OK)
             {
-                foreach (Subject s in subjTypeForm.TechSubj)
+                foreach (Subject s in subjTypeForm.TechSubjects)
                     s.IsTechnicalSubject = true;
-                foreach (Subject s in subjTypeForm.NaturalSubj)
+                foreach (Subject s in subjTypeForm.NaturalSubject)
                     s.IsTechnicalSubject = false;
             }
         }
