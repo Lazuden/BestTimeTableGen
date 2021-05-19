@@ -2,6 +2,7 @@
 {
     public class LessonEditor
     {
+        // todo: используется?
         public LessonEditor()
         {
             Count = 0;
@@ -15,10 +16,8 @@
 
         public int Count { get; set; }
         public Lesson Lesson { get; set; }
-
-        // не используется.
         public string Teacher => Lesson.Teacher.Name;
-        public string Subject => Lesson.Subject.Name; 
-        public string Class => Lesson.Cls.Name; 
+        public string Subject => Lesson.Subject.Name;
+        public string Class => Lesson.Cls.Name;
     }
 }

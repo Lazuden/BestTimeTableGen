@@ -73,9 +73,9 @@
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.gbResults.Controls.Add(this.rtbOutput);
-            this.gbResults.Location = new System.Drawing.Point(852, 297);
+            this.gbResults.Location = new System.Drawing.Point(699, 246);
             this.gbResults.Name = "gbResults";
-            this.gbResults.Size = new System.Drawing.Size(203, 273);
+            this.gbResults.Size = new System.Drawing.Size(356, 324);
             this.gbResults.TabIndex = 1;
             this.gbResults.TabStop = false;
             this.gbResults.Text = "Лог";
@@ -86,7 +86,7 @@
             this.rtbOutput.Location = new System.Drawing.Point(3, 16);
             this.rtbOutput.Name = "rtbOutput";
             this.rtbOutput.ReadOnly = true;
-            this.rtbOutput.Size = new System.Drawing.Size(197, 254);
+            this.rtbOutput.Size = new System.Drawing.Size(350, 305);
             this.rtbOutput.TabIndex = 0;
             this.rtbOutput.Text = "";
             // 

@@ -26,10 +26,7 @@ namespace ColorfulApp
 
         public static Random ThisThreadsRandom
         {
-            get
-            {
-                return _local ?? (_local = new Random(unchecked(Environment.TickCount * 31 + Thread.CurrentThread.ManagedThreadId)));
-            }
+            get { return _local ?? (_local = new Random(unchecked(Environment.TickCount * 31 + Thread.CurrentThread.ManagedThreadId))); }
         }
     }
 }

@@ -26,6 +26,7 @@ namespace ColorfulApp
             for (int i = 0; i < Data.Instance.N; i++)
                 TimeTable[Data.Instance.Lessons[i].Cls.Id].Add(individual.Colors[i], Data.Instance.Lessons[i]);
 
+
             DataTable dt = new DataTable();
             dt.Columns.Add("уроки\\классы");
             string[] tmpList = new string[31];
@@ -59,6 +60,7 @@ namespace ColorfulApp
             // подготовка таблицы для расписания ^^^
             for (int i = 0; i < Data.Instance.N; i++)
                 TimeTable[Data.Instance.Lessons[i].Teacher.Id].Add(individual.Colors[i], Data.Instance.Lessons[i]);
+
 
             DataTable dt = new DataTable();
             dt.Columns.Add("уроки\\Учителя");

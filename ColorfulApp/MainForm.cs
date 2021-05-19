@@ -22,7 +22,6 @@ namespace ColorfulApp
             InitializeComponent();
             _bf = new BinaryFormatter();
 
-
             // Временно при загрузке, чтобы вечно не тыкать
             FillStartData();
             _lessonsBs = new BindingSource
@@ -31,7 +30,7 @@ namespace ColorfulApp
             };
 
             dgvPlan.AutoGenerateColumns = false;
-            dgvPlan.DataSource = _lessonsBs;            
+            dgvPlan.DataSource = _lessonsBs;
             _changesHappend = false;
         }
 
@@ -770,7 +769,7 @@ namespace ColorfulApp
 
         private void сохранитьToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (string.IsNullOrEmpty(_fileName))
+            if (String.IsNullOrEmpty(_fileName))
                 ChooseFilePathToSave();
             else
                 SaveFile();

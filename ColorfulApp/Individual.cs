@@ -59,11 +59,11 @@ namespace ColorfulApp
         {
             int clsCount = Data.Instance.Classes.Count;
             // таблица для учителей
-            Dictionary<int, Dictionary<int, Lesson>> teacherTimeTable = new Dictionary<int, Dictionary<int, Lesson>>(clsCount);
+            var teacherTimeTable = new Dictionary<int, Dictionary<int, Lesson>>(clsCount);
             foreach (int key in Data.Instance.Teachers.Keys)
                 teacherTimeTable.Add(key, new Dictionary<int, Lesson>());
             // таблица для классов
-            Dictionary<int, Dictionary<int, Lesson>> clsTimeTable = new Dictionary<int, Dictionary<int, Lesson>>(clsCount);
+            var clsTimeTable = new Dictionary<int, Dictionary<int, Lesson>>(clsCount);
             foreach(int key in Data.Instance.Classes.Keys)
                 clsTimeTable.Add(key, new Dictionary<int, Lesson>());
             // подготовка таблицы для расписания ^^^
@@ -257,7 +257,7 @@ namespace ColorfulApp
 
         int IComparable<Individual>.CompareTo(Individual other)
         {
-            return Rating.CompareTo(other.Rating);
+            return -Rating.CompareTo(other.Rating);
         }
     }
 }

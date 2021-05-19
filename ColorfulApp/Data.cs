@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace ColorfulApp
 {
@@ -23,19 +22,15 @@ namespace ColorfulApp
             }
         }
 
-        private Data() { }
-
+        private Data()
+        {
+            Name = "Безымянный";
+        }
 
         public List<Subject> Subjects { get; set; }
-        /// <summary>
-        /// Count of lessons
-        /// </summary>
-        public int N => Lessons.Count;
-
-        public bool[,] Mas { get; set; }
-
+        public int N { get => Lessons.Count; }
+        public bool [,] Mas { get; set; }
         public List<Lesson> Lessons { get; set; }
-
         public Dictionary<int, tClass> Classes { get; set; }
         public List<string> Rules { get; set; }
         public List<RuleItem> OriginalRules { get; set; }
@@ -45,8 +40,6 @@ namespace ColorfulApp
         /// </summary>
         public int[] Numbers { get; private set; }
         public Dictionary<int, Teacher> Teachers { get; set; }
-
-        // todo: зачем свойство Name?
         public string Name { get; set; }
         public List<LessonEditor> LessonEditors { get; set; }
         public int GenerationCount { get; set; } = 5;
@@ -57,6 +50,13 @@ namespace ColorfulApp
 
         public void InitializeSupportData()
         {
+            //N = Lessons.Count;
+            for(int i = 0; i < N; i++)
+            {
+                Lessons[i].Id = i;
+            }
+            CreateAdjacencyMatrix();
+            Numbers = new int[N];
             for (int i = 0; i < N; i++)
             {
                 Lessons[i].Id = i;

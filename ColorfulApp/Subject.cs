@@ -5,7 +5,13 @@
         public string Name { get; set; }
         public bool IsTechnicalSubject { get; set; }
 
-        public Subject(string name, bool tech = false)
+        public Subject(string val, bool tech = false)
+        {
+            Name = val;
+            IsTechnicalSubject = tech;
+        }
+
+        public Subject()
         {
             Name = name;
             IsTechnicalSubject = tech;

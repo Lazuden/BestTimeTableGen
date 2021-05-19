@@ -11,7 +11,6 @@ namespace ColorfulApp
     class Generation
     {
         private List<Individual> _individs;
-
         private int _rateSum;
         private int _maxRate;
         private int _aveRate;
@@ -19,6 +18,7 @@ namespace ColorfulApp
 
         public Generation()
         {
+            _individs = new List<Individual>(Properties.Settings.Default.PopulationCount);
             GenerateStartPopulation();
             CalcStats();
         }
@@ -38,7 +38,7 @@ namespace ColorfulApp
                 index = curSum = firstParent = secondParent = 0;
                 firstRnd = ThreadSafeRandom.ThisThreadsRandom.Next(_rateSum);
                 secondRnd = ThreadSafeRandom.ThisThreadsRandom.Next(_rateSum);
-                while(index + 1 < _individs.Count && (curSum < firstRnd || curSum < secondRnd))
+                while (index + 1 < _individs.Count && (curSum < firstRnd || curSum < secondRnd))
                 {
                     if (curSum < firstRnd)
                         firstParent++;
@@ -47,15 +47,12 @@ namespace ColorfulApp
                     curSum += _individs[index++].Rating;
                 }
                 firstParent = firstParent > _individs.Count ? _individs.Count - 1 : firstParent;
-                secondParent = secondParent > _individs.Count ? _individs.Count - 1 : secondParent; 
+                secondParent = secondParent > _individs.Count ? _individs.Count - 1 : firstParent;
                 childs.Add(new Individual(_individs[firstParent], _individs[secondParent]));
-                childs.Add(new Individual(_individs[secondParent], _individs[firstParent]));                
+                childs.Add(new Individual(_individs[secondParent], _individs[firstParent]));
             }
 
-            _individs.Sort(delegate (Individual x, Individual y)
-            {
-                return -x.Rating.CompareTo(y.Rating);
-            });
+            _individs.Sort((x, y) => -x.Rating.CompareTo(y.Rating));
 
             Parallel.ForEach(childs, (curChild) => curChild.BuildAndColorize());
 
@@ -69,31 +66,34 @@ namespace ColorfulApp
         private void GenerateStartPopulation()
         {
             Data.Instance.InitializeSupportData();
-            _individs = Enumerable.Repeat(new Individual(), Data.Instance.IndividualCount).ToList();
+            int startCount = Data.Instance.IndividualCount;
+            for (int i = 0; i < startCount; i++)
+                _individs.Add(new Individual());
             Parallel.ForEach(_individs, (curIndivid) => curIndivid.BuildAndColorize());
         }
 
         private void CalcStats()
         {
             _dispersion = _rateSum = _aveRate = _maxRate = 0;
-            foreach (Individual individual in _individs)
+            foreach (Individual indiv in _individs)
             {
-                _maxRate = individual.Rating > _maxRate ? individual.Rating : _maxRate;
-                _rateSum += individual.Rating;
+                _maxRate = indiv.Rating > _maxRate ? indiv.Rating : _maxRate;
+                _rateSum += indiv.Rating;
             }
 
             _aveRate = _rateSum / _individs.Count;
 
             foreach (Individual indiv in _individs)
             {
-                _dispersion += Math.Pow((indiv.Rating - _aveRate), 2);
+                _dispersion += Math.Pow(indiv.Rating - _aveRate, 2);
             }
             _dispersion /= _individs.Count;
         }
 
         public override string ToString()
         {
-            return $"maxRate: {_maxRate}, aveRate: {_aveRate}, dispersion: {_dispersion, -8} \n";
+            return $"maxRate: {_maxRate}, aveRate: {_aveRate}, dispersion: {_dispersion,-8} \n";
+            //return Dispersion.ToString() + '\n';
         }
 
         public DataTable BestSolution()
