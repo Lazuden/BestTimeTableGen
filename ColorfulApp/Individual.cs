@@ -174,6 +174,7 @@ namespace ColorfulApp
 
         private string prepareDataForInserting()
         {
+            //todo: переделать 
             string result = "";
             for (int i = 0; i < Data.Instance.N; i++)
             {
