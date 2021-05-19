@@ -10,17 +10,17 @@ namespace ColorfulApp
         public SubjectTypesForm()
         {
             InitializeComponent();
-            techSubj = new BindingList<Subject>();
-            naturalSubj = new BindingList<Subject>();
+            TechSubjects = new BindingList<Subject>();
+            NaturalSubject = new BindingList<Subject>();
             foreach(Subject s in Data.Instance.Subjects)
             {
                 if (s.IsTechnicalSubject)
-                    techSubj.Add(s);
+                    TechSubjects.Add(s);
                 else
-                    naturalSubj.Add(s);
+                    NaturalSubject.Add(s);
             }
-            lbTech.DataSource = techSubj;
-            lbNaturalScience.DataSource = naturalSubj;
+            lbTech.DataSource = TechSubjects;
+            lbNaturalScience.DataSource = NaturalSubject;
             lbNaturalScience.DisplayMember = "Name";
             lbTech.DisplayMember = "Name";
         }

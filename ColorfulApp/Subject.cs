@@ -13,8 +13,7 @@
 
         public Subject()
         {
-            Name = name;
-            IsTechnicalSubject = tech;
+
         }
     }
 }

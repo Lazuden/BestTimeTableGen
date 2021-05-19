@@ -8,13 +8,6 @@ namespace ColorfulApp
     [Serializable]
     public class tClass
     {
-        public string Name { get; set; }
-
-        public int Id { get; set; }
-
-        [XmlIgnore]
-        public Dictionary<int, Lesson> Rasp { get; set; }
-
         public tClass(string name, int id)
         {
             Name = name;
