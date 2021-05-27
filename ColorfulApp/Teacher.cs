@@ -22,7 +22,8 @@ namespace ColorfulApp
         public Teacher()
         {
 
-        }        // todo: не используется.
+        }        
+        // todo: не используется.
         public string SubjectsText => string.Join(", ", Subjects.Select(x => x.Name));
     }
 }

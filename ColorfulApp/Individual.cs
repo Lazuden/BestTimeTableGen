@@ -78,7 +78,10 @@ namespace ColorfulApp
             if (ColorsCount > 29) // 34
                 Rating = -100;
             Lesson curLesson;
-            bool lessonsBefore = false, emptyBefore = false, isPrevMath, curMath = false;
+            bool lessonsBefore = false;
+            bool emptyBefore = false;
+            bool isPrevMath;
+            bool curMath = false;
             foreach (Dictionary<int, Lesson> oneClsTimeTable in clsTimeTable.Values)
             {
                 for (int i = 1; i < 31; i++) // 36
@@ -92,7 +95,7 @@ namespace ColorfulApp
                     else
                     {
                         if (Data.Instance.StudentsWindows)
-                            Rating += emptyBefore ? -30 : 1;   
+                            Rating += emptyBefore ? -30 : 1;
                         if (Data.Instance.LessonRotation)
                         {
                             isPrevMath = curMath;
@@ -138,10 +141,12 @@ namespace ColorfulApp
             double result = 0.0;
             var connection = new SQLiteConnection("Data Source=:memory:");
             connection.Open();
-            var sqlCmd = new SQLiteCommand();
-            sqlCmd.Connection = connection;
+            var sqlCmd = new SQLiteCommand
+            {
+                Connection = connection,
+                CommandText = "DROP TABLE IF EXISTS timetable"
+            };
 
-            sqlCmd.CommandText = "DROP TABLE IF EXISTS timetable";
             sqlCmd.ExecuteNonQuery();
             sqlCmd.CommandText = "CREATE TABLE timetable (t int, c int, s int, d int, x int)";
             sqlCmd.ExecuteNonQuery();
